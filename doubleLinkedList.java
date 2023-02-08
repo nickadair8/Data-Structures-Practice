@@ -45,7 +45,9 @@ public class doubleLinkedList {
             return 1;
         }
         while(temp != null){
-            if(temp.val == v) count++;
+            if(temp.val.equals(v)){
+                count++;
+            }
             temp = temp.next;
         }
         return count;
