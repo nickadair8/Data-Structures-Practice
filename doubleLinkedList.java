@@ -23,19 +23,39 @@ public class doubleLinkedList {
         }
     }
 
-
+    //creates the list
+    //to build the list runs O(n)
     public void createList(File text) throws IOException{
         try (Scanner scanner = new Scanner(text)) {
             while(scanner.hasNextLine()){
-                doubleLinkedList.addNode(scanner.nextLine());
+                String temp = scanner.nextLine();
+                Node node = new Node("");
+                node.val = temp;
+                node.freq = wordCount(node.val);
+                doubleLinkedList.addNode(node);
             }
         }
+    }
+
+    //runs O(n)
+    public int wordCount(String v){
+        Node temp = head;
+        int count = 1;
+        if(temp == null){
+            return 1;
+        }
+        while(temp != null){
+            if(temp.val == v) count++;
+            temp = temp.next;
+        }
+        return count;
     }
     
 
     //adds a new node to end of list / creates head if needed
-    public static void addNode(String v) {  
-        Node newNode = new Node(v);  
+    //runs O(1)
+    public static void addNode(Node node) {  
+        Node newNode = node;  
         if(head == null) {  
             head = tail = newNode;   
             head.prev = null;  
@@ -55,14 +75,14 @@ public class doubleLinkedList {
             System.out.println("List empty");
         }
         while(tempNode != null){
-            System.out.println(tempNode.val);
+            System.out.println(tempNode.val + " " + tempNode.freq);
             tempNode = tempNode.next;
         }
     }
    
 
     public static void main(String[] args) throws IOException {
-        File text = new File("inputs/largerText.txt");
+        File text = new File("inputs/largerTest.txt");
         doubleLinkedList list = new doubleLinkedList();
         list.createList(text);
         list.printList();
