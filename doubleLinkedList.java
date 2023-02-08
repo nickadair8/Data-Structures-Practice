@@ -62,7 +62,7 @@ public class doubleLinkedList {
    
 
     public static void main(String[] args) throws IOException {
-        File text = new File("inputs/testText.txt");
+        File text = new File("inputs/largerText.txt");
         doubleLinkedList list = new doubleLinkedList();
         list.createList(text);
         list.printList();
