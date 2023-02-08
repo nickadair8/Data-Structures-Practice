@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -23,8 +24,8 @@ public class doubleLinkedList {
     }
 
 
-    public void createList(InputStream file) throws IOException{
-        try (Scanner scanner = new Scanner(file)) {
+    public void createList(File text) throws IOException{
+        try (Scanner scanner = new Scanner(text)) {
             while(scanner.hasNextLine()){
                 doubleLinkedList.addNode(scanner.nextLine());
             }
@@ -47,10 +48,23 @@ public class doubleLinkedList {
             tail.next = null;  
         }  
     }  
+
+    public void printList(){
+        Node tempNode = head; //set a temp to head so head isn't modified
+        if(tempNode == null){
+            System.out.println("List empty");
+        }
+        while(tempNode != null){
+            System.out.println(tempNode.val);
+            tempNode = tempNode.next;
+        }
+    }
    
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        File text = new File("inputs/testText.txt");
         doubleLinkedList list = new doubleLinkedList();
-        list.createList("t");
+        list.createList(text);
+        list.printList();
     }
 }
