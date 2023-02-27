@@ -83,24 +83,6 @@ public class doubleLinkedList {
         }
     }
 
-    public void delDups(){
-        Node tempHead = head;
-        Node next = null;
-        while(tempHead.next != null){
-            next = tempHead;
-            while(next.next != null){
-                if(tempHead.val.equals(next.val)){
-                    tempHead.next.prev = tempHead.prev;
-                    tempHead.prev.next = tempHead.next;
-                    tempHead.freq = next.freq;
-                }
-                next = next.next;
-            }
-            tempHead = tempHead.next;
-        }
-    }
-
-
     // prints the list and the freq val
     // runs in O(n)
     public void printList() {
