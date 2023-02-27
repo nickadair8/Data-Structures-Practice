@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch doubleLinkedList",
+            "request": "launch",
+            "mainClass": "doubleLinkedList",
+            "projectName": "Data Structures Practice_7c14d5d3"
+        },
+        {
+            "type": "java",
             "name": "Launch Formal23",
             "request": "launch",
             "mainClass": "Formal23",
