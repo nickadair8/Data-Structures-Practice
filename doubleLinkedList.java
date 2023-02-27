@@ -31,6 +31,7 @@ public class doubleLinkedList {
                 Node node = new Node("");
                 node.val = temp;
                 if(numNodes == 0){
+                    node.freq = 0;
                     addNode(node);
                 }
                 wordCount(node);
@@ -56,7 +57,7 @@ public class doubleLinkedList {
         }
         while (temp != null) {
             if (temp.val.equals(node.val)) {
-                node.freq++;
+                temp.freq++;
                 flag = true;
             }
             temp = temp.next;
@@ -137,7 +138,7 @@ public class doubleLinkedList {
         }
  
         // Pick the smaller value
-        if (first.freq < second.freq) {
+        if (first.freq <= second.freq) {
             first.next = merge(first.next, second);
             first.next.prev = first;
             first.prev = null;
@@ -155,7 +156,7 @@ public class doubleLinkedList {
         File text = new File("inputs/largerTest.txt");
         doubleLinkedList list = new doubleLinkedList();
         list.createList(text);
-       // list.mergeSort(getHead());
+        list.mergeSort(getHead());
 
         list.printList();
         // System.out.println(numNodes);
