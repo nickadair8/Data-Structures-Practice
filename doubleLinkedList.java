@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -9,7 +8,6 @@ public class doubleLinkedList {
     static Node head = null; // head of list
     static Node tail = null; // tail of list
     public static int numNodes = 0; // keeps track of the num of nodes in the linked list
-    public static HashMap<String, Integer> wordTable = new HashMap<String, Integer>();
 
     public static class Node {
         public int freq; // the amount of times the word shows up
@@ -20,7 +18,7 @@ public class doubleLinkedList {
             this.val = v;
             this.next = null;
             this.prev = null;
-            this.freq = 0;
+            this.freq = 1;
         }
     }
 
@@ -32,33 +30,41 @@ public class doubleLinkedList {
                 String temp = scanner.nextLine();
                 Node node = new Node("");
                 node.val = temp;
-                node.freq = wordCount(node);
-                findDups(node);
+                if(numNodes == 0){
+                    addNode(node);
+                }
+                wordCount(node);
                 numNodes++;
             }
         }
+            
     }
 
     public static Node getHead() {
         return head;
     }
 
+  
     // runs O(n)
     // remod to run thru array instead of list, add to this list if the val does not
     // exists.
-    public int wordCount(Node node) {
+    public void wordCount(Node node) {
         Node temp = head;
-        int count = 1;
+        boolean flag = false;
         if (temp == null) {
-            return 1;
+            System.out.println("head is empty");
         }
         while (temp != null) {
             if (temp.val.equals(node.val)) {
-                count++;
+                node.freq++;
+                flag = true;
             }
             temp = temp.next;
         }
-        return count;
+        if(flag == false){
+          addNode(node);
+        }
+
     }
 
     // adds a new node to end of list / creates head if needed
@@ -77,44 +83,23 @@ public class doubleLinkedList {
         }
     }
 
-    public static void findDups(Node node) {
-        if (node == null) {
-            return;
-        }
-        if (wordTable.containsKey(node.val)) {
-            wordTable.put(node.val, ++node.freq);
-            deleteNode(node);
-        } else {
-            wordTable.put(node.val, node.freq);
-        }
-
-    }
-
-    static void deleteNode(Node del) {
-        if(head != null) {
-    
-            //1. if head in not null and next of head
-            //   is null, release the head
-            if(head.next == null) {
-              head = null;
-            } else {
-              
-              //2. Else, traverse to the second last 
-              //   element of the list
-              Node temp = new Node("");
-              temp = head;
-              while(temp.next.next != null)
-                temp = temp.next;
-              
-              //3. Change the next of the second 
-              //   last node to null and delete the
-              //   last node
-              Node lastNode = temp.next;
-              temp.next = null; 
-              lastNode = null;
+    public void delDups(){
+        Node tempHead = head;
+        Node next = null;
+        while(tempHead.next != null){
+            next = tempHead;
+            while(next.next != null){
+                if(tempHead.val.equals(next.val)){
+                    tempHead.next.prev = tempHead.prev;
+                    tempHead.prev.next = tempHead.next;
+                    tempHead.freq = next.freq;
+                }
+                next = next.next;
             }
-          }
+            tempHead = tempHead.next;
+        }
     }
+
 
     // prints the list and the freq val
     // runs in O(n)
@@ -134,25 +119,16 @@ public class doubleLinkedList {
     // }
 
     public Node mergeSort(Node top) {
-        Node leftList = new Node("");
-        Node rightList = new Node("");
         Node temp = new Node("");
         if (top == null || top.next == null) { // base cases [checks to see if the list has any entries or if we got a single node]
             return top;
         }
+        temp = middleNode(top);
+        top = mergeSort(top);
+        temp = mergeSort(temp);
 
-        // split the list in half
-        leftList = top;
-        rightList = middleNode(top);
-        temp = rightList.next;
-        rightList.next = null;
-        rightList = temp;
-
-        // recursively sorts each seperated list
-        leftList = mergeSort(leftList);
-        rightList = mergeSort(rightList);
-
-        return merge(leftList, rightList);
+        return merge(top, temp);
+ 
     }
 
     // helper to get the middle nodes, runs in O(n/2)
@@ -167,33 +143,38 @@ public class doubleLinkedList {
         return temp;
     }
 
-    public Node merge(Node left, Node right) {
-        Node tail = new Node("");
-        Node temp = tail;
-        while (left != null && right != null) {
-            if (left.freq < right.freq) {
-                tail.next = left;
-                left = left.next;
-            } else {
-                tail.next = right;
-                right = right.next;
-            }
-            tail = tail.next;
+    public Node merge(Node first, Node second) {
+        // If first linked list is empty
+        if (first == null) {
+            return second;
         }
-        if (left != null) {
-            tail.next = left;
+ 
+        // If second linked list is empty
+        if (second == null) {
+            return first;
         }
-        if (right != null) {
-            tail.next = right;
+ 
+        // Pick the smaller value
+        if (first.freq < second.freq) {
+            first.next = merge(first.next, second);
+            first.next.prev = first;
+            first.prev = null;
+            return first;
         }
-        return temp.next;
+        else {
+            second.next = merge(first, second.next);
+            second.next.prev = second;
+            second.prev = null;
+            return second;
+        }
     }
 
     public static void main(String[] args) throws IOException {
         File text = new File("inputs/largerTest.txt");
         doubleLinkedList list = new doubleLinkedList();
         list.createList(text);
-        // list.mergeSort(getHead());
+       // list.mergeSort(getHead());
+
         list.printList();
         // System.out.println(numNodes);
     }

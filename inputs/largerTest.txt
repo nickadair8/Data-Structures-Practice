@@ -17,7 +17,7 @@ came
 up
 with
 them
-Albert 
+Albert
 Einstein
 Learn
 as
@@ -25,14 +25,14 @@ if
 you
 will
 live
-forever 
+forever
 live
 like
 you
 will
 die
 tomorrow
-Mahatma 
+Mahatma
 Gandhi
 Stay
 away
@@ -44,8 +44,9 @@ try
 to
 disparage
 your
-ambitions 
-Small minds
+ambitions
+Small
+minds
 will
 always
 do
@@ -92,7 +93,7 @@ you
 can
 give
 out
-Eleanor 
+Eleanor
 Roosevelt
 We
 cannot
