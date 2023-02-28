@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.io.File;
-import java.util.List;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.Scanner;
 
 public class doubleLinkedList {
@@ -21,7 +22,15 @@ public class doubleLinkedList {
             this.freq = 1;
         }
     }
-
+    class MyComparator implements Comparator<Node> {
+        public int compare(Node x, Node y)
+        {
+     
+            return x.freq - y.freq;
+        }
+    }
+     
+   
     // creates the list
     // to build the list runs O(n), entire function runs O(n^2)
     public void createList(File text) throws IOException {
@@ -152,13 +161,55 @@ public class doubleLinkedList {
         }
     }
 
+    public void encode(){
+        PriorityQueue<Node> queue = new PriorityQueue<Node>(numNodes, new MyComparator());
+        Node temp = head;
+       //adds every element of the ll to the queue, these elements are leaf nodes
+        while(temp != null){
+            Node leaf = new Node(temp.val);
+            leaf.freq = temp.freq;
+            leaf.prev = null;
+            leaf.next = null;
+            queue.add(leaf);
+            temp = temp.next;
+        }
+    
+        Node root = null; //root node 
+        //creating parent nodes from leaf nodes
+        while(queue.size() > 1){
+            Node parent = new Node(null);
+            Node left = queue.peek();
+            queue.poll();
+            Node right = queue.peek();
+            queue.poll();
+            parent.freq = left.freq + right.freq;
+            parent.prev = left;
+            parent.next = right;
+            root = parent;
+            queue.add(parent);
+            printTree(root, "");
+        }
+    }
+
+    public void printTree(Node root, String v){
+       //base case, checks to see if we have hit a leaf node 
+        if(root.prev == null && root.next == null && !(root.val.equals(null))){
+            System.out.println(root.val + ": " + v);
+            return;
+        }
+        //recursively iterates throught the left and right subtrees 
+        printTree(root.prev, v + "0");
+        printTree(root.next, v + "1");
+    }
+
     public static void main(String[] args) throws IOException {
         File text = new File("inputs/largerTest.txt");
         doubleLinkedList list = new doubleLinkedList();
         list.createList(text);
         list.mergeSort(getHead());
 
-        list.printList();
+        //list.printList();
+        list.encode();
         // System.out.println(numNodes);
     }
 }
